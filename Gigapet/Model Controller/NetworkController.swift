@@ -28,6 +28,7 @@ class NetworkController {
     var bearer: Bearer?
     var foods: [Food] = []
     var children: [Child] = []
+    var addingChildren: [AddChild] = []
 
     
     func mySignUp(with user: User, completion: @escaping (Error?) -> Void){
@@ -167,10 +168,19 @@ class NetworkController {
     }
 
     
-    func addChild(name: String, calorieGoal: Int, completion: @escaping (Error?) -> Void){
+    struct AddChild: Codable {
+        var name: String
+        var calorieGoal: String
+        var parentId: String
+        
+    }
+    
+    
+    
+    func addChild(name: String, calorieGoal: String, completion: @escaping (Error?) -> Void){
         let userId: String = KeychainWrapper.standard.string(forKey: "userId")!
 
-        let newChild = Child(id: Int(userId)!, name: name, calorieGoal: calorieGoal)
+        let newChild = AddChild(name: name, calorieGoal: calorieGoal, parentId: String(userId))
         print("HERE AddChild: ", newChild)
         //get the url
         let url = baseURL.appendingPathComponent("app/addchild")
@@ -219,7 +229,7 @@ class NetworkController {
                 completion(error)
                 return
             }
-            self.children.append(newChild)
+            self.addingChildren.append(newChild)
             completion(nil)
             }.resume()
     }
