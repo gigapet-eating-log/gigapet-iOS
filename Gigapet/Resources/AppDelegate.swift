@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             // Take user to a home page
             let mainStoryboard:UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let homePage = mainStoryboard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
+            let homePage = mainStoryboard.instantiateViewController(withIdentifier: "navcontroller") //as! MainPageViewController
             self.window?.rootViewController = homePage
         }
         return true
