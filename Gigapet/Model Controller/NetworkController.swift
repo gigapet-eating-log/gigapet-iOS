@@ -29,6 +29,7 @@ class NetworkController {
     var foods: [Food] = []
     var children: [Child] = []
     var addingChildren: [AddChild] = []
+    var addFoods: [AddFood] = []
 
     
     func mySignUp(with user: User, completion: @escaping (Error?) -> Void){
@@ -117,10 +118,22 @@ class NetworkController {
             }.resume()
     }
 
+    struct AddFood: Codable {
+        var name: String
+        var mealTime: String
+        var foodType: Category
+        var foodName: String
+        var parentId: String
+        var calories: String
+        var date: String
+        var childId: String
+    }
+    
     func addFood(foodName: String, foodType: Category, calories: String, date: String, childId: String, completion: @escaping (Error?) -> Void){
         let userId: String = KeychainWrapper.standard.string(forKey: "userId")!
+        let newFood = AddFood(name: "Green beans", mealTime: "lunch", foodType: foodType, foodName: foodName, parentId: userId, calories: calories, date: date, childId: childId)
         
-        let newFood = Food(foodName: foodName, foodType: foodType, calories: calories, date: date, parentId: userId, id: Int(childId)!, mealTime: "lunch")
+//        let newFood = Food(foodName: foodName, foodType: foodType, calories: calories, date: date, parentId: userId, id: Int(childId)!, mealTime: "lunch")
         
         //get the url
         let url = baseURL.appendingPathComponent("app/addfood")
@@ -162,7 +175,7 @@ class NetworkController {
                 completion(error)
                 return
             }
-            self.foods.append(newFood)
+            self.addFoods.append(newFood)
             completion(nil)
             }.resume()
     }
